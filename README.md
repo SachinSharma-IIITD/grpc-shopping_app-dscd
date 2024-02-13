@@ -39,10 +39,10 @@ The application will prompt for  the following information:
 *"product_name, category, ..."*   
 The values should be ", " (comma AND space) separated, else errors will be raised.  
 
+<div style="font-weight:300">
 
 ### User Functions
 1. **Start the Application**: The user is prompted to enter the market server's IP address and port number, and a username. A unique UUID and a port number are generated for this username. This starts the gRPC notification server.
-
 2. **Register Seller**: The application sends a regSeller request to the server with the seller's UUID and the address of the notification server.
 
 3. **Sell Product**: The user is prompted to enter the product details. The application sends a sellProduct request to the server.
@@ -51,9 +51,10 @@ The values should be ", " (comma AND space) separated, else errors will be raise
 
 5. **Delete Product**: The application sends a deleteProduct request to the server.
 
-6. **Show Seller's Products**: The application sends a showProducts request to the server and prints the list of products of that seller.
+1. **Show Seller's Products**: The application sends a showProducts request to the server and prints the list of products of that seller.
 
-7. **Receive Notifications**: At any time, the user may receive notifications from the server which is printed to the console.
+5. **Receive Notifications**: At any time, the user may receive notifications from the server which is printed to the console.
+</div>
 
 
 ## Buyer Client Side Application
@@ -65,6 +66,8 @@ The application will prompt for  the following information:
 - **Server IP Address**: *Enter apt address*
 - **Server Port Number**: *Enter **50051***
 - **Buyer username**: *Enter a unique username for the buyer. This will be used for creating **UUID** and **port number***
+
+<div style="font-weight:300">
 
 ### User Functions
 1. **Start the Application**: The user is prompted to enter the market server's IP address and port number, and a username. A unique UUID and a port number are generated for this username. This starts the gRPC notification server.
@@ -82,3 +85,4 @@ The application will prompt for  the following information:
 7. **Rate Product**: The user gives rating to product from 1 to 5.
 
 8. **Receive Notifications**: At any time, the user may receive notifications from the server which is printed to the console.
+</div>
