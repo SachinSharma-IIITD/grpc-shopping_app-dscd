@@ -20,6 +20,7 @@ class ShoppingAppServicer(shopping_pb2_grpc.ShoppingAppServicer):
     # Seller methods
     def regSeller(self, request, context):
         print('Seller registration request:\n', str(request))
+
         if request.uuid not in self.seller_db:
             try:
                 # Create a gRPC channel to connect to the server
@@ -34,7 +35,7 @@ class ShoppingAppServicer(shopping_pb2_grpc.ShoppingAppServicer):
             print("Connected to seller's notification server")
 
             self.seller_db[request.uuid] = {
-                'notif_server_addr': request.notif_server_addr, 'products': [], 'stub': stub}
+                'notif_server_addr': request.notif_server_addr, 'products': set(), 'stub': stub}
 
             print('Accepted\n')
             # print(self.seller_db)
@@ -54,7 +55,7 @@ class ShoppingAppServicer(shopping_pb2_grpc.ShoppingAppServicer):
                 pid = str(int(sorted(self.product_db.keys())[-1])+1)
             self.product_db[pid] = request
             self.product_db[pid].pid = pid
-            self.seller_db[request.seller_uuid]['products'].append(pid)
+            self.seller_db[request.seller_uuid]['products'].add(pid)
 
             print('Accepted\n')
             # print(self.seller_db)
@@ -104,13 +105,15 @@ class ShoppingAppServicer(shopping_pb2_grpc.ShoppingAppServicer):
                 self.seller_db[request.seller_uuid]['products'].remove(
                     request.product_id)
                 del self.product_db[request.product_id]
-                del self.wishlist_db[request.product_id]
-                del self.rating_db[request.product_id]
+
+                if request.product_id in self.wishlist_db:
+                    del self.wishlist_db[request.product_id]
+                if request.product_id in self.rating_db:
+                    del self.rating_db[request.product_id]
 
                 for buyer in self.buyer_db:
                     if request.product_id in self.buyer_db[buyer]['wishlist']:
-                        self.buyer_db[buyer]['wishlist'].remove(
-                            request.product_id)
+                        self.buyer_db[buyer]['wishlist'].remove(request.product_id)
 
                 print("Accepted\n")
                 # print(self.seller_db)
@@ -158,7 +161,7 @@ class ShoppingAppServicer(shopping_pb2_grpc.ShoppingAppServicer):
             print("Connected to buyer's notification server")
 
             self.buyer_db[request.uuid] = {
-                'notif_server_addr': request.notif_server_addr, 'stub': stub, 'wishlist': []}
+                'notif_server_addr': request.notif_server_addr, 'stub': stub, 'wishlist': set()}
 
             print('Accepted\n')
             # print(self.buyer_db)
@@ -220,10 +223,9 @@ class ShoppingAppServicer(shopping_pb2_grpc.ShoppingAppServicer):
 
         if request.product_id in self.product_db:
             if not self.wishlist_db.get(request.product_id, None):
-                self.wishlist_db[request.product_id] = []
-            self.wishlist_db[request.product_id].append(request.buyer_uuid)
-            self.buyer_db[request.buyer_uuid]['wishlist'].append(
-                request.product_id)
+                self.wishlist_db[request.product_id] = set()
+            self.wishlist_db[request.product_id].add(request.buyer_uuid)
+            self.buyer_db[request.buyer_uuid]['wishlist'].add(request.product_id)
 
             print("Accepted\n")
             # print()

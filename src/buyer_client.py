@@ -80,13 +80,13 @@ def run(server_addr, buyer_uuid, ip, port):
             case '5':
                 req = ViewWishlistReq(buyer_uuid=buyer_uuid)
 
-                try:
-                    print(f'\nWishlist:')
-                    for product in stub.viewWishlist(req):
-                        print(str(product))
-                except:
-                    print('\nServer offline\n')
-                    exit(1)
+                # try:
+                print(f'\nWishlist:')
+                for product in stub.viewWishlist(req):
+                    print(str(product))
+                # except:
+                #     print('\nServer offline\n')
+                #     exit(1)
 
             case '6':
                 pid = input("Enter product ID: ")
