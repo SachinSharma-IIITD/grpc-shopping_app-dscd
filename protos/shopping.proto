@@ -1,0 +1,132 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.routeguide";
+option java_outer_classname = "RouteGuideProto";
+option objc_class_prefix = "RTG";
+
+package shopping;
+
+message Product {
+  string seller_uuid = 1;
+  string pid = 2;
+  string name = 3;
+  string cat = 4;
+  int32 price = 5;
+  int32 qty = 6;
+  float rating = 7;
+  string desc = 8;
+}
+
+message ProductForDisplay {
+  string pid = 1;
+  string name = 2;
+  string cat = 3;
+  int32 price = 4;
+  float rating = 5;
+  string desc = 6;
+}
+
+message Seller {
+  string uuid = 1;
+  string notif_server_addr = 2;
+}
+
+message Response {
+  bool status = 1;
+  string message = 2;
+}
+
+message RegProductResponse {
+  bool status = 1;
+  string message = 2;
+  string product_id = 3;
+}
+
+message UpdateProductReq {
+  string seller_uuid = 1;
+  string product_id = 2;
+  Product new_product = 3;
+}
+
+message DeleteProductReq {
+  string seller_uuid = 1;
+  string product_id = 2;
+}
+
+message ShowProductReq {
+  string seller_uuid = 1;
+}
+
+message BrowseProductsReq {
+  string buyer_uuid = 1;
+  string product_name = 2;
+  string cat_name = 3;
+}
+
+message BuyProductReq {
+  string buyer_uuid = 1;
+  string product_id = 2;
+  int32 qty = 3;
+}
+
+message WishlistReq {
+  string buyer_uuid = 1;
+  string product_id = 2;
+}
+
+message ViewWishlistReq {
+  string buyer_uuid = 1;
+}
+
+message RateProductReq {
+  string buyer_uuid = 1;
+  string product_id = 2;
+  float rating = 3;
+}
+
+message Buyer {
+  string uuid = 1;
+  string notif_server_addr = 2;
+}
+
+message ProductBoughtNotif {
+  string product_id = 1;
+  int32 qty = 2;
+}
+
+message ProductUpdatedNotif {
+  ProductForDisplay new_product = 1;
+}
+
+message PingReq {
+  string message = 1;
+}
+
+service ShoppingApp {
+  // Common functions
+  rpc checkConnection(PingReq) returns (Response) {}
+  // Seller functions
+  rpc regSeller(Seller) returns (Response) {}
+  rpc sellProduct(Product) returns (RegProductResponse) {}
+  rpc updateProduct(UpdateProductReq) returns (Response) {}
+  rpc deleteProduct(DeleteProductReq) returns (Response) {}
+  rpc showProducts(ShowProductReq) returns (stream Product) {}
+  // Buyer functions
+  rpc regBuyer(Buyer) returns (Response) {}
+  rpc browseProducts(BrowseProductsReq) returns (stream ProductForDisplay) {}
+  rpc buyProduct(BuyProductReq) returns (Response) {}
+  rpc addToWishlist(WishlistReq) returns (Response) {}
+  rpc viewWishlist(ViewWishlistReq) returns (stream ProductForDisplay) {}
+  rpc rateProduct(RateProductReq) returns (Response) {}
+}
+
+service BuyerNotification {
+  rpc notifyConnection(PingReq) returns (Response) {}
+  rpc notifyProductUpdated(ProductUpdatedNotif) returns (Response) {}
+}
+
+service SellerNotification {
+  rpc notifyConnection(PingReq) returns (Response) {}
+  rpc notifyProductBought(ProductBoughtNotif) returns (Response) {}
+}
