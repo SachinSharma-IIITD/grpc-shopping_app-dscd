@@ -86,3 +86,36 @@ The application will prompt for  the following information:
 
 8. **Receive Notifications**: At any time, the user may receive notifications from the server which is printed to the console.
 </div>
+
+## Misc
+### Compile Protocol Buffer
+*Run in src directory*
+
+`python -m grpc_tools.protoc -I../protos --python_out=. --pyi_out=. --grpc_python_out=. ../protos/shopping.proto`
+
+### Install gcloud CLI
+1. `sudo apt-get install apt-transport-https ca-certificates gnupg curl sudo`
+
+2. `curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-463.0.0-linux-x86_64.tar.gz`
+
+3. `tar -xf google-cloud-cli-463.0.0-linux-x86_64.tar.gz`
+
+4. `./google-cloud-sdk/install.sh`
+
+5. `gcloud init`
+   
+6. `gcloud auth login`
+
+### SSH to VM
+Market server: `gcloud compute ssh --zone "us-central1-b" "market-server-dscd" --project "dscd-assignment-1-414105"`
+
+Seller client: `gcloud compute ssh --zone "us-central1-f" "seller-client-dscd" --project "dscd-assignment-1-414105"`
+
+Buyer client: `gcloud compute ssh --zone "us-central1-b" "buyer-client-dscd" --project "dscd-assignment-1-414105"`
+
+### Transfer files to VM using scp
+Market server: `gcloud compute scp --recurse src market-server-dscd:~`
+
+Seller client: `gcloud compute scp --recurse src seller-client-dscd:~`
+
+Buyer client: `gcloud compute scp --recurse src buyer-client-dscd:~`
