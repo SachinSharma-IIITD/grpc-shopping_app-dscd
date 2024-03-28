@@ -119,3 +119,5 @@ Market server: `gcloud compute scp --recurse src market-server-dscd:~`
 Seller client: `gcloud compute scp --recurse src seller-client-dscd:~`
 
 Buyer client: `gcloud compute scp --recurse src buyer-client-dscd:~`
+
+![image](https://github.com/SachinSharma-IIITD/grpc-shopping_app-dscd/assets/92939004/57cc7864-cbe1-4d5a-aec4-8129042fbc94)
